@@ -1,20 +1,22 @@
+from heapq import heappush, heappop
+
+
 class Solution:
-    def nextLargerElement(self, arr, n):
-        s = []
-        ans = []
-        for i in reversed(arr):
-            if len(s) == 0:
-                ans.append(-1)
-            elif len(s) > 0 and i < s[-1]:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
 
-                ans.append(s[-1])
-            elif len(s) > 0 and s[-1] <= i:
-                while len(s) > 0 and s[-1] <= i:
-                    s.pop()
-                if len(s) == 0:
-                    ans.append(-1)
-                else:
-                    ans.append(s[-1])
+        h = []
+        for i in range(len(lists)):
+            if lists[i]:
+                heappush(h, [lists[i].val, i])
+                lists[i] = lists[i].next
 
-            s.append(i)
-        return (ans[::-1])
+        head = p = ListNode()
+        while h:
+            v, i = heappop(h)
+            p.next = ListNode(v)
+            p = p.next
+            if lists[i]:
+                heappush(h, [lists[i].val, i])
+                lists[i] = lists[i].next
+
+        return head.next
